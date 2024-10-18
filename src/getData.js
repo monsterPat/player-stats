@@ -1,5 +1,7 @@
+
+
 export default function getData(){
-  function getPlayers(){
+  function getPlayers1(){
       const players =  ([
         {
           id: 1, 
@@ -205,5 +207,5 @@ export default function getData(){
 
   }
 
-  return {getPlayers, getGames, getLeagues, getStats};
+  return {getGames, getLeagues, getStats};
 }

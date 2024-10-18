@@ -12,16 +12,33 @@ import getData from "./getData.js";
 import PlayerDetails from "./PlayerDetails.jsx";
 import PlayerStats from "./PlayerStats.jsx";
 import { config } from '@fortawesome/fontawesome-svg-core';
+import { collection, getDocs} from "firebase/firestore";
+import { db, firebaseConfig } from "./config/firestore.js";
+import { faTry } from "@fortawesome/free-solid-svg-icons";
 config.autoAddCss = false;
 
 function App() {
   const [players, setPlayers] = useState([]);
   const [games, setGames] = useState([]);
   const [leagues, setLeagues] = useState([])
-  const {getPlayers, getGames, getLeagues} = getData();
+  const {getGames, getLeagues} = getData();
+  //console.log(firebaseConfig);
+  //console.log(JSON.stringify(import.meta.env.VITE_API_KEY));
 
+  const getPlayers = async () => {
+    try{
+      const querySnapshot = await getDocs(collection(db, "players"));
+      const players = querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
+      //console.log(players);
+      setPlayers(players);
+    } catch (error){
+      console.log(error);
+    }
+  }
+
+  
   useEffect(() => {
-    setPlayers(getPlayers());
+    getPlayers();
     setGames(getGames());
     setLeagues(getLeagues());
   }, []);
@@ -31,7 +48,7 @@ function App() {
     setPlayers([...players, {...newPlayer, id: players.length + 1}]);
   }
   function handleGetPlayer(id){
-    return players.find((p) => p.id == Number.parseInt(id));
+    return players.find((p) => p.id == id);
   }
   function handleGetLeague(id){
     return leagues.find((l) => l.id == Number.parseInt(id));

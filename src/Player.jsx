@@ -6,13 +6,15 @@ export default function Player({onGetPlayer}) {
   const params = useParams();
   const player= onGetPlayer(params.id);
 
+  //const p = onGetPlayer(params.id);
+
 
   return (
     <div className="product-details-layout">
       <div>
         <h1>{`${player.firstName} ${player.lastName}`}</h1>
         <img
-          src="../images/Player1.JPG"
+          src={`../images/Player${player.imgId}.JPG`}
           width="225"
           height="300"
           className="product-details-image"

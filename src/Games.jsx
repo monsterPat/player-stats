@@ -56,9 +56,8 @@ export default function Games({games, onGetLeague, onGetPlayer}) {
                 <tr>
                     <th width="20%">League</th>
                     <th width="20%">Name</th>
-                    <th width="15%">Date</th>
-                    <th width="15%">Team</th>
-                    <th width="30%">Other Details</th>
+                    <th width="20%">Date</th>
+                    <th width="40%">Other Details</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -68,9 +67,6 @@ export default function Games({games, onGetLeague, onGetPlayer}) {
                         <td>{onGetLeague(g.leagueId).name}</td>
                         <td>{g.name}</td>
                         <td>{g.date.toLocaleDateString("en-US", options)}</td>
-                        <td>
-                        <strong>Bulls</strong>
-                        </td>
                         <td>{displayOutcome(g)}</td>
                     </tr>
                     );
