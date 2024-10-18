@@ -2,15 +2,11 @@
 import Button from "./Button.jsx";
 import {Link, Outlet} from "react-router-dom";
 import { config } from '@fortawesome/fontawesome-svg-core';
-//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-//import { faCircleInfo, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleInfo, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
 export default function Games({games, onGetLeague, onGetPlayer}) {
-    //config.autoAddCss = false;
 
-    //return (<><h1>Hello Team</h1><br/><Button onClick={handleOnClick}>Pay</Button></>);
-    //console.log("rerendering players");
-    //console.log(players);
     function displayMedalWinners(g){
         let winnerText = "";
         if(g.medalWinners){
@@ -57,17 +53,25 @@ export default function Games({games, onGetLeague, onGetPlayer}) {
                     <th width="20%">League</th>
                     <th width="20%">Name</th>
                     <th width="20%">Date</th>
-                    <th width="40%">Other Details</th>
+                    <th width="30%">Other Details</th>
+                    <th width="10%">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 {games.map((g) => {
                     return (
                     <tr key={g.id}>
+                        {console.log(g.date)}
                         <td>{onGetLeague(g.leagueId).name}</td>
                         <td>{g.name}</td>
-                        <td>{g.date.toLocaleDateString("en-US", options)}</td>
+                        <td>{g.date.toDate().toLocaleDateString("en-US", options)}</td>
                         <td>{displayOutcome(g)}</td>
+                        <td>
+                            <Link to={`/game/${g.id}`} className="btn">
+                                <FontAwesomeIcon icon={faPenToSquare} />
+                            </Link>
+                            
+                        </td>
                     </tr>
                     );
                 })}
@@ -77,8 +81,9 @@ export default function Games({games, onGetLeague, onGetPlayer}) {
         )}
         </div>
         <br/>
-        <Link to="/addPlayer">Add Game</Link>
+        <Link to="/addGame">Add Game</Link>
     </div>
 
     )
 }
+//new Date(g.date).toLocaleDateString("en-US", options)

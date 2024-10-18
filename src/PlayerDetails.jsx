@@ -1,4 +1,6 @@
 import {useOutletContext} from "react-router-dom";
+import Button from "./Button.jsx";
+import {Link} from "react-router-dom";
 
 export default function PlayerDetails({onGetPlayer}){
     //const params = useParams();
@@ -19,6 +21,7 @@ export default function PlayerDetails({onGetPlayer}){
         <div className="attribute">
             <strong>Team:</strong> {player.team}
         </div>
+        <Link to="editPlayer" className="btn">Edit Player Profile</Link>
 
     </div>
 

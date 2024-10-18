@@ -1,16 +1,12 @@
 
-import Button from "./Button.jsx";
 import {Link, Outlet} from "react-router-dom";
+import Button from "./Button.jsx";
 import { config } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
-export default function Players({players}) {
+export default function Players({players, setIsAdding}) {
     config.autoAddCss = false;
-
-    //return (<><h1>Hello Team</h1><br/><Button onClick={handleOnClick}>Pay</Button></>);
-    //console.log("rerendering players");
-    //console.log(players);
 
     return (
     <div className="cart-layout">
@@ -42,9 +38,6 @@ export default function Players({players}) {
                         <strong>{p.team}</strong>
                         </td>
                         <td>
-                            <Link to="/addPlayer" className="btn">
-                                <FontAwesomeIcon icon={faPenToSquare} />
-                            </Link>
                             <Link to={`/player/${p.id}`} className="btn">
                                 <FontAwesomeIcon icon={faCircleInfo} />
                             </Link>
@@ -59,7 +52,7 @@ export default function Players({players}) {
         )}
         </div>
         <br/>
-        <Link to="/addPlayer">Add Player</Link>
+        <Link onClick={() => setIsAdding(true)} to="/addPlayer">Add Player</Link>
     </div>
 
     )

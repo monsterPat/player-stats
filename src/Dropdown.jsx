@@ -13,6 +13,7 @@ export default function Dropdown(props){
       {required && <span className="input-required">*</span>}
       <div>
         <select 
+            id={`${placeholder}-dropdown`}
             value={initialValue}
             type={type}
             placeholder={placeholder}
