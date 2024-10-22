@@ -7,6 +7,7 @@ import Dropdown from "./Dropdown.jsx";
 import Swal from "sweetalert2";
 import { db } from "./config/firestore.js";
 import {collection, addDoc} from "firebase/firestore";
+import dayjs from "dayjs";
 
 export default function AddGame({leagues, getGames}){
     const [name, setName] = useState("");
@@ -64,7 +65,13 @@ export default function AddGame({leagues, getGames}){
     <div>
         <Dropdown placeholder="Select a League" onChange={(e) => {setLeagueId(e.target.value)}} options={leaguesNVP} initialValue={leagueId}/ >
         <Input placeholder="Name" onChange={(e) => {setName(e.target.value)}} required></Input>
-        <Input placeholder="Date"  type="date" onChange={(e) => {setGameDate(new Date(e.target.value))}} required></Input>
+        <Input placeholder="Date"  type="date" onChange={(e) => {
+                console.log(e.target.value);
+                const tempDayJS = new dayjs(e.target.value,"MM-DD-YYY")
+                console.log(tempDayJS.toDate());
+                setGameDate(tempDayJS.toDate())
+                }
+            } required></Input>
         <br/>
         <Button onClick={handleAddGameOnClick} >Add Game</Button><>|||</>
         <Button onClick={() => navigate("/games")} >Cancel</Button>

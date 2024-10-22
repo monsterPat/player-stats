@@ -7,6 +7,8 @@ import { faCircleInfo, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
 export default function Players({players, setIsAdding}) {
     config.autoAddCss = false;
+    
+    players.sort((a,b) => a.firstName.localeCompare(b.firstName));
 
     return (
     <div className="cart-layout">

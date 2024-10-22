@@ -8,10 +8,20 @@ import { faCircleInfo, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 export default function Games({games, onGetLeague, onGetPlayer}) {
 
     function displayMedalWinners(g){
+        games.sort((a,b) => {
+            const tempLeagueA = onGetLeague(a.leagueId);
+            const tempLeagueB = onGetLeague(b.leagueId);
+            if (tempLeagueA.name !== tempLeagueB.name) {
+                return tempLeagueA.name.localeCompare(tempLeagueB.name);
+              } else {
+                return a.name.localeCompare(b.name);;
+              }
+
+        })
         let winnerText = "";
         if(g.medalWinners){
             winnerText = g.medalWinners.reduce((fullText, p)=> {
-                const tempPlayer = onGetPlayer(p);
+                const tempPlayer = onGetPlayer(p.value);
                 return (`${fullText} ${tempPlayer.firstName} ${tempPlayer.lastName},`)
             },"");
             winnerText = winnerText.substring(0,winnerText.length-1);
@@ -61,7 +71,6 @@ export default function Games({games, onGetLeague, onGetPlayer}) {
                 {games.map((g) => {
                     return (
                     <tr key={g.id}>
-                        {console.log(g.date)}
                         <td>{onGetLeague(g.leagueId).name}</td>
                         <td>{g.name}</td>
                         <td>{g.date.toDate().toLocaleDateString("en-US", options)}</td>

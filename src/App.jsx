@@ -16,13 +16,16 @@ import EditPlayer from "./EditPlayer.jsx";
 import { config } from '@fortawesome/fontawesome-svg-core';
 import { collection, getDocs} from "firebase/firestore";
 import { db } from "./config/firestore.js";
+import Login from './Login.jsx';
 config.autoAddCss = false;
 
 function App() {
   const [players, setPlayers] = useState([]);
   const [games, setGames] = useState([]);
   const [leagues, setLeagues] = useState([]);
-  const [isAdding, setIsAdding] = useState(false);
+  const [isAdmin, setIsAdmin]= useState(false);
+  const [isAdding, setIsAdding]= useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const getPlayers = async () => {
     try{
@@ -48,7 +51,6 @@ function App() {
     try{
       const querySnapshot = await getDocs(collection(db, "leagues"));
       const tempLeagues = querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
-      console.log(tempLeagues);
       setLeagues(tempLeagues);
     } catch (error){
       console.log(error);
@@ -56,11 +58,13 @@ function App() {
   }
 
   useEffect(() => {
-    console.log("reloading data");
-    getPlayers();
-    getLeagues();
-    getGames();
-  }, []);
+    if(isLoggedIn){
+      console.log("reloading data");
+      getPlayers();
+      getLeagues();
+      getGames();
+    }
+  }, [isLoggedIn]);
   
   function handleGetPlayer(id){
     return players.find((p) => p.id == id);
@@ -72,8 +76,9 @@ function App() {
     return games.find((g) => g.id == id);
   }
 
-  return (
-    <BrowserRouter>
+  return (<>
+    {!isLoggedIn && (<div className="container"><Login setIsAdmin={setIsAdmin} setIsLoggedIn={setIsLoggedIn}/></div>)}
+    {isLoggedIn && (<BrowserRouter>
       <NavBar />
       <div className="container">
         <Routes>
@@ -84,18 +89,18 @@ function App() {
           <Route path="/addGame"  element={<AddGame leagues={leagues} getGames={getGames} />}></Route>
           <Route path="/player/:id/"   element={<Player onGetPlayer={handleGetPlayer}/>}>
             <Route path="" element={<PlayerDetails />}></Route>
-            <Route path="stats" element={<PlayerStats />}></Route>
+            <Route path="stats" element={<PlayerStats onGetLeague={handleGetLeague} onGetGame={handleGetGame} onGetPlayer={handleGetPlayer} />}></Route>
             <Route path="editPlayer" element={<EditPlayer onGetPlayer={handleGetPlayer} getPlayers={getPlayers}/>}></Route>
           </Route>
           
           <Route path="/games" element={<Games games={games} onGetPlayer={handleGetPlayer} onGetLeague={handleGetLeague}/>}></Route>
-          <Route path="/game/:id"   element={<EditGame onGetGame={handleGetGame} leagues={leagues} getGames={getGames}/>}></Route>
+          <Route path="/game/:id"   element={<EditGame onGetGame={handleGetGame} leagues={leagues} getGames={getGames} players={players}/>}></Route>
           <Route path="/statTracker" element={<StatTracker players={players} games={games} leagues={leagues}/>}></Route>
         </Routes>
       </div>
-    </BrowserRouter>
+    </BrowserRouter>)}
 
-  )
+  </>)
 }
 
 export default App;

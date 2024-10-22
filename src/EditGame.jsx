@@ -6,19 +6,22 @@ import Dropdown from "./Dropdown.jsx";
 import Swal from "sweetalert2";
 import { db } from "./config/firestore.js";
 import {doc, setDoc} from "firebase/firestore";
+import dayjs from "dayjs";
+import MultiSelect2 from "./MultiSelect.jsx";
 
-export default function EditGame({leagues, getGames, onGetGame}){
+export default function EditGame({leagues, getGames, onGetGame, players}){
     const params = useParams();
     const game = onGetGame(params.id);
-    console.log(game);
     const [name, setName] = useState(game.name);
     const [leagueId, setLeagueId] = useState(game.leagueId);
-    const [gameDate, setGameDate] = useState(game.date.toDate().toLocaleDateString('en-CA'));
+    const [gameDate, setGameDate] = useState((new dayjs(game.date.toDate()).toDate()).toLocaleDateString('en-CA'));
     const [leaguesNVP, setLeaguesNVP] = useState([]);
+    const [playersNVP, setPlayersNVP] = useState([]);
+    const [outcome, setOutcome] = useState(game.outcome? game.outcome:"");
+    const [score, setScore] = useState(game.score? game.score:"");
+    const [medalWinners, setMedalWinners] = useState(game.medalWinners? game.medalWinners: []);
     const navigate = useNavigate();
-
     
-
     useEffect(() => {
         let tempLeaguesNVP = leagues.map((l) => {
             return {
@@ -28,8 +31,16 @@ export default function EditGame({leagues, getGames, onGetGame}){
         });
     
         setLeaguesNVP(tempLeaguesNVP);
-    },[]);
+        //setMedalWinners(['H2MGjNboF0MjugiuQRjQ','epzcnHukxLfXBw27Us2F'])
+        let tempPlayersNVP = players.map((p) => {
+            return {
+                value: p.id,
+                label: (`${p.firstName}  ${p.lastName}`)
+            }
+        });
     
+        setPlayersNVP(tempPlayersNVP);
+    },[]);
 
     const handleSaveGameOnClick = async (e) => {
         if(!name || !leagueId || !gameDate){
@@ -40,10 +51,14 @@ export default function EditGame({leagues, getGames, onGetGame}){
                 showConfirmButton: true,
             });
         }
+        const tempD = new dayjs(gameDate);
         const editGame = {
             name,
             leagueId,
-            date: new Date(gameDate)
+            outcome,
+            score,
+            date: tempD.toDate(),
+            medalWinners: medalWinners
         };
         try {
             await setDoc(doc(db, "games", game.id), {
@@ -56,19 +71,30 @@ export default function EditGame({leagues, getGames, onGetGame}){
         getGames();
         Swal.fire({
             icon: 'success',
-            title: 'Added!',
-            text: `${name} has been Added.`,
+            title: 'Updated!',
+            text: `${name} has been Updated.`,
             showConfirmButton: false,
             timer: 1500,
         });
         navigate("/games");
     }
+
+    const handleSelectionChange = (selectedValues) => {
+        setMedalWinners(selectedValues);
+      };
     return (
     <div>
         <Dropdown placeholder="Select a League" onChange={(e) => {setLeagueId(e.target.value)}}  value={leagueId} options={leaguesNVP} initialValue={leagueId}/ >
         <Input placeholder="Name" onChange={(e) => {setName(e.target.value)}} value={name} required></Input>
-        <Input placeholder="Date"  type="date" onChange={(e) => {setGameDate(new Date(e.target.value).toLocaleDateString('en-CA'));}} value={gameDate} required></Input>
+        <Input placeholder="Date"  type="date" onChange={(e) => {
+                const tempDayJS = new dayjs(e.target.value,"MM-DD-YYY")
+                setGameDate(tempDayJS.toDate().toLocaleDateString('en-CA'))
+                }
+            } value={gameDate} required></Input>
         <br/>
+        <Dropdown placeholder="Select Outcome" onChange={(e) => {setOutcome(e.target.value)}}  value={outcome} options={[{name: "Win", value: "Win"},{name:"Loss", value:"Loss"}]} initialValue={outcome}/ >
+        <Input placeholder="Score" onChange={(e) => {setScore(e.target.value)}} value={score} required></Input> 
+        <MultiSelect2 placeholder="Medal Winners" options={playersNVP} value={medalWinners} onChange={handleSelectionChange}/ >
         <Button onClick={handleSaveGameOnClick} >Update Game</Button><>|||</>
         <Button onClick={() => navigate("/games")} >Cancel</Button>
     </div>)
