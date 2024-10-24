@@ -18,10 +18,14 @@ export default function Counter({label, onStatAdd, onStatSubtract, initialValue,
   return (
     <label>
         <h2>{label}</h2>
-    <div className="counter">
-      <Button disabled={count<=0} onClick={handleSubtract} className="btn-accent">-</Button>
-        <Input type="text" value={count} readOnly />
-      <Button onClick={handleAdd}>+</Button>
+    <div className="counter-container">
+      <div className="counter-btn">
+      <button disabled={count<=0} onClick={handleSubtract} className="btn-subtract">-</button>
+      </div>  
+        <input type="text" value={count} className="counter-input" readOnly />
+        <div className="counter-btn">
+      <button onClick={handleAdd} className="btn-add">+</button>
+      </div>
     </div>
     </label>
   );

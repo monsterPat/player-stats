@@ -1,0 +1,77 @@
+.table-container {
+    overflow-x: auto;
+    margin: 20px 0;
+    padding: 1rem;
+  }
+
+  .table-container h1{
+    padding: 1rem;
+  }
+  
+  .responsive-table {
+    width: 100%;
+    border-collapse: collapse;
+    padding: 1rem;
+  }
+  
+  .responsive-table th, 
+  .responsive-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  .responsive-table th {
+    font-weight: bold;
+  }
+  @media screen and (max-width: 600px) {
+    .responsive-table {
+      display: block;
+      position: relative;
+      width: 100%;
+    }
+  
+    .responsive-table thead {
+      display: block;
+      float: left;
+      width: 100%;
+    }
+  
+    .responsive-table tbody {
+      display: block;
+      width: 100%;
+    }
+  
+    .responsive-table tr {
+      display: block;
+      margin-bottom: 10px;
+    }
+  
+    .responsive-table th, 
+    .responsive-table td {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: right;
+      padding-left: 50%;
+      position: relative;
+    }
+  
+    .responsive-table th::before, 
+    .responsive-table td::before {
+      content: attr(data-label);
+      position: absolute;
+      left: 10px;
+      text-align: left;
+      font-weight: bold;
+    }
+  
+    .responsive-table td {
+      padding-left: 10px;
+      text-align: left;
+    }
+  
+    .responsive-table th::before {
+      content: "";
+    }
+  }

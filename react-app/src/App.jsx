@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import './index.css';
 import '@fortawesome/fontawesome-svg-core/styles.css';
+import "@fontsource/poppins"; // Defaults to weight 400
+import "@fontsource/poppins/400.css"; // Specify weight
+import "@fontsource/poppins/400-italic.css"; // Specify weight and style
 import Players from "./Players.jsx";
 import Games from "./Games.jsx";
 import AddGame from "./AddGame.jsx";
 import EditGame from "./EditGame.jsx";
 import StatTracker from "./StatTracker.jsx";
-import NavBar from "./NavBar.jsx";
+import NavBar from "./components/navbar/Navbar";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import AddPlayer from "./AddPlayer.jsx";
 import Player from "./Player.jsx";
@@ -25,7 +28,7 @@ function App() {
   const [leagues, setLeagues] = useState([]);
   const [isAdmin, setIsAdmin]= useState(false);
   const [isAdding, setIsAdding]= useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const getPlayers = async () => {
     try{
@@ -75,7 +78,6 @@ function App() {
   function handleGetGame(id){
     return games.find((g) => g.id == id);
   }
-
   return (<>
     {!isLoggedIn && (<div className="container"><Login setIsAdmin={setIsAdmin} setIsLoggedIn={setIsLoggedIn}/></div>)}
     {isLoggedIn && (<BrowserRouter>

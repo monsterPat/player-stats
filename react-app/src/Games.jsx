@@ -1,11 +1,50 @@
-
-import Button from "./Button.jsx";
 import {Link, Outlet} from "react-router-dom";
-import { config } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import ResponsiveTable from "./components/table/ResponsiveTable";
+import { useState, useEffect } from "react";
 
 export default function Games({games, onGetLeague, onGetPlayer}) {
+    const [gameData, setGameData] = useState([]);
+    const gameColumns = [
+        {
+            name: "League",
+            width: "20%"
+        },
+        {
+            name: "Name",
+            width: "20%"
+        },
+        {
+            name: "Date",
+            width: "20%"
+        },
+        {
+            name: "Other Details",
+            width: "20%"
+        },
+        {
+            name: "Actions",
+            width: "10%"
+        }
+    ];
+
+    useEffect(() => {
+        const tempGameData = games.map((g) => {
+            return ({
+                league: onGetLeague(g.leagueId).name,
+                name: g.name,
+                date: g.date.toDate().toLocaleDateString("en-US", options),
+                outcome: displayOutcome(g),
+                actions: (
+                    <Link to={`/game/${g.id}`} className="btn">
+                        <FontAwesomeIcon icon={faPenToSquare} />
+                    </Link>
+                )
+            });
+        })
+        setGameData(tempGameData);
+    },[]);
 
     function displayMedalWinners(g){
         games.sort((a,b) => {
@@ -49,50 +88,12 @@ export default function Games({games, onGetLeague, onGetPlayer}) {
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
     return (
-    <div className="cart-layout">
+    <div>
         <div>
-        <h1>Your Games</h1>
-        {games.length === 0 && (
-            <p>You do not have any games to display.</p>
-        )}
-        {games.length > 0 && (
-            <>
-            <table className="table table-cart">
-                <thead>
-                <tr>
-                    <th width="20%">League</th>
-                    <th width="20%">Name</th>
-                    <th width="20%">Date</th>
-                    <th width="30%">Other Details</th>
-                    <th width="10%">Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {games.map((g) => {
-                    return (
-                    <tr key={g.id}>
-                        <td>{onGetLeague(g.leagueId).name}</td>
-                        <td>{g.name}</td>
-                        <td>{g.date.toDate().toLocaleDateString("en-US", options)}</td>
-                        <td>{displayOutcome(g)}</td>
-                        <td>
-                            <Link to={`/game/${g.id}`} className="btn">
-                                <FontAwesomeIcon icon={faPenToSquare} />
-                            </Link>
-                            
-                        </td>
-                    </tr>
-                    );
-                })}
-                </tbody>
-            </table>
-            </>
-        )}
+        <ResponsiveTable title="Your Games" data={gameData} columnHeaders={gameColumns}/>
         </div>
         <br/>
         <Link to="/addGame">Add Game</Link>
     </div>
-
     )
 }
-//new Date(g.date).toLocaleDateString("en-US", options)

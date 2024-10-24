@@ -157,7 +157,6 @@ export default function StatTracker({games, players, leagues}){
 
         {isTracking && (<>
             <h1>Tracking {players.find((p) => p.id == playerId).firstName} {players.find((p) => p.id == playerId).lastName} for {leagues.find((l) => l.id == leagueId).name} - {games.find((g) => g.id == gameId).name}</h1>
-            <Button onClick={handleSwitchOnClick}>Switch Player/Game</Button>
             <StatCounter label="Points" onStatSubtract={handleStatSubtract} onStatAdd={handleStatAdd} initialValue={liveStat.points} stat={liveStat} statType="points"/>
             <StatCounter label="Rebounds" onStatSubtract={handleStatSubtract} onStatAdd={handleStatAdd} initialValue={liveStat.rebounds} stat={liveStat} statType="rebounds"/>
             <StatCounter label="Steals" onStatSubtract={handleStatSubtract} onStatAdd={handleStatAdd} initialValue={liveStat.steals} stat={liveStat} statType="steals"/>
