@@ -3,11 +3,11 @@ import {Link, Outlet} from "react-router-dom";
 import Button from "./Button.jsx";
 import { config } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleInfo, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { faCircleInfo, faRemove } from '@fortawesome/free-solid-svg-icons';
 import {useState, useEffect} from "react";
-import ResponsiveTable from "./components/table/ResponsiveTable";
+import ResponsiveTable from "./ResponsiveTable.jsx";
 
-export default function Players({players, setIsAdding}) {
+export default function Players({players, setIsAdding, isManage, title, OnRemovePlayer}) {
     config.autoAddCss = false;
     const [playerData, setPlayerData] = useState([]);
     const [playerColumns,setPlayerColumns] = useState([{name: "First Name", width:"30%"},{name: "Last Name", width:"30%"},{name: "Actions", width:"40%"}]);
@@ -19,22 +19,26 @@ export default function Players({players, setIsAdding}) {
             return ({
                 firstName: (p.firstName),
                 lastName: (p.lastName),
-                actions: (
+                actions: (<>
                     <Link to={`/player/${p.id}`} className="btn">
                         <FontAwesomeIcon icon={faCircleInfo} />
                     </Link>
-                )
+                    {isManage && (
+                    <Button onClick={() => OnRemovePlayer(p.id)} className="btn">
+                        <FontAwesomeIcon icon={faRemove} />
+                    </Button>)}
+                </>)
             });
         })
         setPlayerData(tempPlayerData);
-    },[]);
+    },[players]);
     
 
     return (
     <div>
-        <ResponsiveTable title="Your Players" data={playerData} columnHeaders={playerColumns}/>
+        <ResponsiveTable title={title} data={playerData} columnHeaders={playerColumns}/>
         <br/>
-        <Link onClick={() => setIsAdding(true)} to="/addPlayer">Add Player</Link>
+        {!isManage && <Link onClick={() => setIsAdding(true)} to="/addPlayer">Add Player</Link>}
     </div>
 
     )

@@ -2,7 +2,7 @@ import { collection, getDocs} from "firebase/firestore";
 import { db } from "./config/firestore.js";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import ResponsiveTable from "./components/table/ResponsiveTable.jsx";
+import ResponsiveTable from "./ResponsiveTable.jsx";
 
 export default function PlayerStats({onGetGame, onGetLeague, onGetPlayer}){
     const [stats, setStats] = useState([]);
@@ -46,10 +46,10 @@ export default function PlayerStats({onGetGame, onGetLeague, onGetPlayer}){
         const tempFooterData = [
             {
                 name: "Average",
-                points: stats.reduce((total, s) => total + s.points,0)/stats.length,
-                rebounds: stats.reduce((total, s) => total + s.rebounds,0)/stats.length,
-                steals: stats.reduce((total, s) => total + s.steals,0)/stats.length,
-                assists: stats.reduce((total, s) => total + s.assists,0)/stats.length
+                points: (stats.reduce((total, s) => total + s.points,0)/stats.length).toFixed(2),
+                rebounds: (stats.reduce((total, s) => total + s.rebounds,0)/stats.length).toFixed(2),
+                steals: (stats.reduce((total, s) => total + s.steals,0)/stats.length).toFixed(2),
+                assists: (stats.reduce((total, s) => total + s.assists,0)/stats.length).toFixed(2)
             },
             {
                 name: "Total",
@@ -80,20 +80,3 @@ export default function PlayerStats({onGetGame, onGetLeague, onGetPlayer}){
         <ResponsiveTable title="Player Stats" columnHeaders={statColumns} data={statData} footer={footer}/>
     </div>)
 }
-
-/*{<tfoot>
-<tr>
-<th className="cart-highlight">Avg:</th>
-<th className="cart-highlight">{stats.reduce((total, s) => total + s.points,0)/stats.length}</th>
-<th className="cart-highlight">{stats.reduce((total, s) => total + s.rebounds,0)/stats.length}</th>
-<th className="cart-highlight">{stats.reduce((total, s) => total + s.steals,0)/stats.length}</th>
-<th className="cart-highlight">{stats.reduce((total, s) => total + s.assists,0)/stats.length}</th>
-</tr>
-<tr>
-<th className="cart-highlight">Total:</th>
-<th className="cart-highlight">{stats.reduce((total, s) => total + s.points,0)}</th>
-<th className="cart-highlight">{stats.reduce((total, s) => total + s.rebounds,0)}</th>
-<th className="cart-highlight">{stats.reduce((total, s) => total + s.steals,0)}</th>
-<th className="cart-highlight">{stats.reduce((total, s) => total + s.assists,0)}</th>
-</tr>
-</tfoot>}*/

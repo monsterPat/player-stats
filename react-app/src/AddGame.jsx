@@ -1,5 +1,5 @@
 import {useState, useEffect} from "react";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import Input from "./Input.jsx";
 import Button from "./Button.jsx";
 import AgeSelector from "./AgeSelector.jsx";
@@ -10,8 +10,9 @@ import {collection, addDoc} from "firebase/firestore";
 import dayjs from "dayjs";
 
 export default function AddGame({leagues, getGames}){
+    const params = useParams();
     const [name, setName] = useState("");
-    const [leagueId, setLeagueId] = useState("");
+    const [leagueId, setLeagueId] = useState((params && params.id)?params.id:"");
     const [gameDate, setGameDate] = useState(new Date());
     const [leaguesNVP, setLeaguesNVP] = useState([]);
     const navigate = useNavigate();
@@ -66,14 +67,12 @@ export default function AddGame({leagues, getGames}){
         <Dropdown placeholder="Select a League" onChange={(e) => {setLeagueId(e.target.value)}} options={leaguesNVP} initialValue={leagueId}/ >
         <Input placeholder="Name" onChange={(e) => {setName(e.target.value)}} required></Input>
         <Input placeholder="Date"  type="date" onChange={(e) => {
-                console.log(e.target.value);
-                const tempDayJS = new dayjs(e.target.value,"MM-DD-YYY")
-                console.log(tempDayJS.toDate());
-                setGameDate(tempDayJS.toDate())
+                const tempDayJS = new dayjs(e.target.value,"MM-DD-YYY");
+                setGameDate(tempDayJS.toDate());
                 }
             } required></Input>
         <br/>
         <Button onClick={handleAddGameOnClick} >Add Game</Button><>|||</>
-        <Button onClick={() => navigate("/games")} >Cancel</Button>
+        <Button className="btn-accent" onClick={() => navigate(`/league/${leagueId}`)} >Cancel</Button>
     </div>)
 }

@@ -1,27 +1,27 @@
 import {Link, Outlet} from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
-import ResponsiveTable from "./components/table/ResponsiveTable";
+import ResponsiveTable from "./ResponsiveTable";
 import { useState, useEffect } from "react";
+import Dropdown from "./Dropdown.jsx";
 
-export default function Games({games, onGetLeague, onGetPlayer}) {
+export default function Games({games, onGetLeague, onGetPlayer, leagues, isAdmin, isManage, title}) {
     const [gameData, setGameData] = useState([]);
+    const [leagueId, setLeagueId] = useState("");
+    const [leaguesNVP, setLeaguesNVP] = useState([]);
     const gameColumns = [
-        {
-            name: "League",
-            width: "20%"
-        },
+
         {
             name: "Name",
-            width: "20%"
+            width: "25%"
         },
         {
             name: "Date",
-            width: "20%"
+            width: "25%"
         },
         {
             name: "Other Details",
-            width: "20%"
+            width: "40%"
         },
         {
             name: "Actions",
@@ -29,23 +29,41 @@ export default function Games({games, onGetLeague, onGetPlayer}) {
         }
     ];
 
-    useEffect(() => {
-        const tempGameData = games.map((g) => {
-            return ({
-                league: onGetLeague(g.leagueId).name,
-                name: g.name,
-                date: g.date.toDate().toLocaleDateString("en-US", options),
-                outcome: displayOutcome(g),
-                actions: (
-                    <Link to={`/game/${g.id}`} className="btn">
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                    </Link>
-                )
-            });
-        })
-        setGameData(tempGameData);
-    },[]);
 
+    useEffect(() => {
+        let tempLeaguesNVP = leagues.map((l) => {
+            return {
+                value: l.id,
+                name: l.name
+            }
+        });
+        setLeaguesNVP(tempLeaguesNVP);
+        if(!leagueId || leagueId === ""){
+            setLeagueId((leagues && leagues[0])? leagues[0].id:"");
+        }
+    },[leagues]);
+
+    useEffect(() => {
+        const tempGames = games.filter((g)=> g.leagueId === leagueId);
+        const tempGameData = tempGames.map((g) => {
+                return ({
+                    name: g.name,
+                    date: g.date.toDate().toLocaleDateString("en-US", options),
+                    outcome: displayOutcome(g),
+                    actions: (
+                        <Link to={`/game/${g.id}`} className="btn">
+                            <FontAwesomeIcon icon={faPenToSquare} />
+                        </Link>
+                    )
+                });
+        })
+
+        setGameData(tempGameData);
+    },[leagueId])
+
+    function handleOnLeagueChange(e){
+        setLeagueId(e.target.value);
+    }
     function displayMedalWinners(g){
         games.sort((a,b) => {
             const tempLeagueA = onGetLeague(a.leagueId);
@@ -90,10 +108,12 @@ export default function Games({games, onGetLeague, onGetPlayer}) {
     return (
     <div>
         <div>
-        <ResponsiveTable title="Your Games" data={gameData} columnHeaders={gameColumns}/>
+        {!isManage && <Dropdown placeholder="Select a League" options={leaguesNVP} initialValue={leagueId} onChange={handleOnLeagueChange}/>}
+        {isAdmin && !isManage && <Link to={`/league/${leagueId}`}>Manage League</Link>}
+        <ResponsiveTable title={title} data={gameData} columnHeaders={gameColumns}/>
         </div>
         <br/>
-        <Link to="/addGame">Add Game</Link>
+        {isAdmin && isManage && <Link to={`/${leagueId}/addGame`}>Add Game</Link>}
     </div>
     )
 }

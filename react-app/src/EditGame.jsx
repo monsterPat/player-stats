@@ -20,6 +20,7 @@ export default function EditGame({leagues, getGames, onGetGame, players}){
     const [outcome, setOutcome] = useState(game.outcome? game.outcome:"");
     const [score, setScore] = useState(game.score? game.score:"");
     const [medalWinners, setMedalWinners] = useState(game.medalWinners? game.medalWinners: []);
+    const [isLive, setIsLive] = useState((game && game.isLive)? true: false);
     const navigate = useNavigate();
     
     useEffect(() => {
@@ -58,6 +59,7 @@ export default function EditGame({leagues, getGames, onGetGame, players}){
             outcome,
             score,
             date: tempD.toDate(),
+            isLive,
             medalWinners: medalWinners
         };
         try {
@@ -82,6 +84,9 @@ export default function EditGame({leagues, getGames, onGetGame, players}){
     const handleSelectionChange = (selectedValues) => {
         setMedalWinners(selectedValues);
       };
+    const handleIsLiveChange = () => {
+        setIsLive(!isLive);
+    }
     return (
     <div>
         <Dropdown placeholder="Select a League" onChange={(e) => {setLeagueId(e.target.value)}}  value={leagueId} options={leaguesNVP} initialValue={leagueId}/ >
@@ -92,10 +97,11 @@ export default function EditGame({leagues, getGames, onGetGame, players}){
                 }
             } value={gameDate} required></Input>
         <br/>
+        <Input placeholder="Is Live?" type="checkbox" checked={isLive} onChange={handleIsLiveChange}/>
         <Dropdown placeholder="Select Outcome" onChange={(e) => {setOutcome(e.target.value)}}  value={outcome} options={[{name: "Win", value: "Win"},{name:"Loss", value:"Loss"}]} initialValue={outcome}/ >
         <Input placeholder="Score" onChange={(e) => {setScore(e.target.value)}} value={score} required></Input> 
         <MultiSelect2 placeholder="Medal Winners" options={playersNVP} value={medalWinners} onChange={handleSelectionChange}/ >
         <Button onClick={handleSaveGameOnClick} >Update Game</Button><>|||</>
-        <Button onClick={() => navigate("/games")} >Cancel</Button>
+        <Button className="btn-accent" onClick={() => navigate("/games")} >Cancel</Button>
     </div>)
 }

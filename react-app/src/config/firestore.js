@@ -1,11 +1,22 @@
 // Import the functions you need from the SDKs you need
+//import * as admin from 'firebase-admin';
 import { initializeApp } from "firebase/app";
-import { getFirestore, initializeFirestore } from "firebase/firestore";
+import {initializeFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import '../wasm_exec.js';
+import '../wasmTypes.d.js';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
+function wasmFibonacciSum(number) {
+  return new Promise<number>((resolve) => {
+      const res = window.wasmFibonacciSum(n);
+      resolve(res);
+  });
+}
+
+
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
   authDomain: import.meta.env.VITE_AUTH_DOMAIN,
@@ -20,9 +31,26 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
-//const db = getFirestore(app);
-//const db = {};
 const db = initializeFirestore(app, {
     experimentalForceLongPolling: true
 });
-export {auth, db, firebaseConfig};
+//setLogLevel("debug");
+export {auth, db, wasmFibonacciSum};
+
+//q
+//const admin = require('firebase-admin');
+
+// Initialize the Firebase Admin SDK
+/*admin.initializeApp();
+
+const uid = '0yRqkQwEEJhGgB9VC7wWTGDcgi02'; // Replace with the user's UID
+
+// Set the "admin" custom claim to true
+admin.auth().setCustomUserClaims(uid, { admin: true })
+  .then(() => {
+    console.log('Admin claim set successfully!');
+  })
+  .catch((error) => {
+    console.error('Error setting admin claim:', error);
+  });
+  */

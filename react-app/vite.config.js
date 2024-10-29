@@ -1,7 +1,10 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import dotenv from 'dotenv';
+import wasm from 'vite-plugin-wasm';
+import topLevelAwait from 'vite-plugin-top-level-await';
 
+//console.log(topLevelAwait(wasm()))
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
@@ -12,5 +15,6 @@ export default defineConfig({
     'process.env.VITE_STORAGE_BUCKET' : JSON.stringify(process.env.VITE_STORAGE_BUCKET),
     'process.env.VITE_MESSAGING_SENDER_ID' : JSON.stringify(process.env.VITE_MESSAGING_SENDER_ID),
     'process.env.VITE_APP_ID' : JSON.stringify(process.env.VITE_APP_ID)
-    } // This line is crucialq
+    }, // This line is crucial
+    build: { chunkSizeWarningLimit: 1600, },
 })

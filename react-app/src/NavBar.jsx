@@ -1,59 +1,86 @@
+import React, {useState} from 'react';
+import {AiOutlineMenu, AiOutlineClose, AiOutlineSearch, AiOutlineUser} from 'react-icons/ai';
+import Logo from '/src/images/teamLogo.jpg';
 import { NavLink } from "react-router-dom";
 
-export default function Navbar() {
-
+const Navbar = ({setLoggedIn}) => {
+  const [nav, setNav] = useState(false);
   return (
-    <nav className="navbar">
-      <NavLink to="/" className="nav-brand">
-        <div className="title-container">
-          <div className="title-image">
+    <div className="navbar">
+      <NavLink to="/" >
+        <div >
+          <div className="nav-image">
             <img
-              src="../images/teamLogo.jpg"
+              src={Logo}
               width="65"
               height="50"
               className="product-details-image"
               alt="Zilker Bulls"
             />
           </div>
-          <div className="title-title">
+          <div className="nav-title">
             <h2>Zilker Bulls</h2>
           </div>
         </div>
       </NavLink>
-      <ul>
+      <nav>
+      <ul className={nav? ["menu", "active"].join(' '):"menu"}>
         <li className="nav-item">
-          <NavLink
-            className={({ isActive }) => (isActive ? "active" : "")}
+          <NavLink onClick={() => {setNav(!nav)}}
+            className={({ isActive }) => (isActive ? "nav-active" : "")}
             to="/"
           >
             Home
           </NavLink>
         </li>
         <li className="nav-item">
-          <NavLink
-            className={({ isActive }) => (isActive ? "active" : "")}
+          <NavLink onClick={() => {setNav(!nav)}}
+            className={({ isActive }) => (isActive ? "nav-active" : "")}
+            to="/liveGame"
+          >
+            Live Game
+          </NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink onClick={() => {setNav(!nav)}}
+            className={({ isActive }) => (isActive ? "nav-active" : "")}
+            to="/players"
+          >
+            Players
+          </NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink onClick={() => {setNav(!nav)}}
+            className={({ isActive }) => (isActive ? "nav-active" : "")}
             to="/games"
           >
             Games
           </NavLink>
         </li>
         <li className="nav-item">
-          <NavLink
-            className={({ isActive }) => (isActive ? "active" : "")}
+          <NavLink onClick={() => {setNav(!nav)}}
+            className={({ isActive }) => (isActive ? "nav-active" : "")}
             to="/statTracker"
           >
             Stat Tracker
           </NavLink>
         </li>
         <li className="nav-item">
-          <NavLink
-            className={({ isActive }) => (isActive ? "active" : "")}
-            to="/players"
+          <a onClick={() => {
+              setLoggedIn(false);
+              {setNav(!nav)};
+            }}
           >
-            Players
-          </NavLink>
+            Logout
+          </a>
         </li>
       </ul>
     </nav>
-  );
+    <div onClick={() => setNav(!nav)} className="mobilebtn">
+      {!nav? <AiOutlineMenu size={25}/> : <AiOutlineClose size={25}/>}
+    </div>
+  </div>
+  )
 }
+
+export default Navbar

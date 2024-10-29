@@ -5,9 +5,10 @@ import Input from "./Input.jsx";
 export default function Counter({label, onStatAdd, onStatSubtract, initialValue, statType, stat}){
   const [count, setCount] = useState(initialValue);
 
-  const handleAdd = () => {
-    setCount(prevCount => prevCount + 1);
-    onStatAdd(stat, statType);
+  const handleAdd = (num) => {
+    console.log(num)
+    setCount(prevCount => prevCount + num);
+    onStatAdd(stat, statType,num);
   };
 
   const handleSubtract = () => {
@@ -17,16 +18,22 @@ export default function Counter({label, onStatAdd, onStatSubtract, initialValue,
 
   return (
     <label>
-        <h2>{label}</h2>
+        <h3>{label}</h3>
     <div className="counter-container">
       <div className="counter-btn">
       <button disabled={count<=0} onClick={handleSubtract} className="btn-subtract">-</button>
       </div>  
         <input type="text" value={count} className="counter-input" readOnly />
         <div className="counter-btn">
-      <button onClick={handleAdd} className="btn-add">+</button>
+      <button onClick={() => handleAdd(1)} className="btn-add">+{label=="Points"?"1":""}</button>
+      {label == "Points" && (<>
+        <br/><br/>
+      <button onClick={() => handleAdd(2)} className="btn-add">+2</button><br/><br/>
+      <button onClick={() => handleAdd(3)} className="btn-add">+3</button>
+      </>)}
       </div>
     </div>
+    <hr/><hr/>
     </label>
   );
 };
