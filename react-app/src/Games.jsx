@@ -38,8 +38,12 @@ export default function Games({games, onGetLeague, onGetPlayer, leagues, isAdmin
             }
         });
         setLeaguesNVP(tempLeaguesNVP);
-        if(!leagueId || leagueId === ""){
+        const storedLeagueId = localStorage.getItem("leagueId");
+        if(storedLeagueId && storedLeagueId != undefined && storedLeagueId !=""){
+            setLeagueId(storedLeagueId);
+        }else if(!storedLeagueId || !leagueId || leagueId === ""){
             setLeagueId((leagues && leagues[0])? leagues[0].id:"");
+            localStorage.setItem("leagueId", (leagues && leagues[0])? leagues[0].id:"");
         }
     },[leagues]);
 
@@ -59,10 +63,21 @@ export default function Games({games, onGetLeague, onGetPlayer, leagues, isAdmin
         })
 
         setGameData(tempGameData);
-    },[leagueId])
+    },[leagueId]);
+
+    useEffect(() => {
+        const storedLeagueId = localStorage.getItem("leagueId");
+        if(storedLeagueId && storedLeagueId != undefined && storedLeagueId !=""){
+            setLeagueId(storedLeagueId);
+        }else if(!storedLeagueId || !leagueId || leagueId === ""){
+            setLeagueId((leagues && leagues[0])? leagues[0].id:"");
+            localStorage.setItem("leagueId", (leagues && leagues[0])? leagues[0].id:"");
+        }
+    },[]);
 
     function handleOnLeagueChange(e){
         setLeagueId(e.target.value);
+        localStorage.setItem("leagueId", e.target.value);
     }
     function displayMedalWinners(g){
         games.sort((a,b) => {
@@ -113,7 +128,7 @@ export default function Games({games, onGetLeague, onGetPlayer, leagues, isAdmin
         <ResponsiveTable title={title} data={gameData} columnHeaders={gameColumns}/>
         </div>
         <br/>
-        {isAdmin && isManage && <Link to={`/${leagueId}/addGame`}>Add Game</Link>}
+        {isAdmin && <Link to={`/${leagueId}/addGame`}>Add Game</Link>}
     </div>
     )
 }

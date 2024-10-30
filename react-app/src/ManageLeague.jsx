@@ -129,7 +129,6 @@ function ManageLeague({players, leagues, onGetLeague, getGames, getLeagues, game
     <Button onClick={handleAddPlayers} disabled={(queuePlayers && queuePlayers.length>0?false:true)}>Add Selected Players to Roster</Button>
     <MultiSelect2  options={playersNVP} value={queuePlayers} onChange={handleSelectionChange}/ >
     <Games title="League Games" isManage={true} isAdmin={isAdmin} games={leagueGames} onGetPlayer={onGetPlayer} onGetLeague={() => {
-      //console.log(league.id);
       return league.id;
     }} leagues={[league]}/>
     <br/>
