@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 const ResponsiveTable = ({ data, columnHeaders,  title, footer}) => {
   return (
     <div className="table-container">
-      {title && title!="" && <h1>{title}</h1>}
+      {title && title!="" && <h2>{title}</h2>}
       {!data || data.length == 0 && <p>There is no data.</p>}
       {data && data.length > 0 &&
       (<table className={["responsive-table","table responsive-table"].join(" ")}>

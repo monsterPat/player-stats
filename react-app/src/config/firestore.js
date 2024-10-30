@@ -2,7 +2,7 @@
 //import * as admin from 'firebase-admin';
 import { initializeApp } from "firebase/app";
 import {initializeFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut  } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -26,8 +26,9 @@ const auth = getAuth(app);
 const db = initializeFirestore(app, {
     experimentalForceLongPolling: true
 });
+const googleProvider = new GoogleAuthProvider();
 //setLogLevel("debug");
-export {auth, db};
+export {auth, db, googleProvider, signInWithPopup, signOut };
 
 //q
 //const admin = require('firebase-admin');

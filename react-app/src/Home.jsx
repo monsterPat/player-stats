@@ -24,10 +24,10 @@ const Home = () => {
         Select your player in the <a onClick={goProfile} style={{"cursor":"pointer"}}>Profile</a> to easily follow your guy.
         <br/>
         <br/>
-        To track stats for a player, click <a onClick={goStatTracker} style={{"cursor":"pointer"}}>Stat Tracker</a> in the menu. By default the current game will be selected. You just need to choose the player and Start Tracking!
+        To track stats for a player, click <a onClick={goStatTracker} style={{"cursor":"pointer"}}>Stat Tracker</a> in the menu.
         <br/>
         <br/>
-        Feel free to navigate to the <a onClick={goPlayers} style={{"cursor":"pointer"}}>Players</a> menu to view each players stored history.
+        Navigate to the <a onClick={goPlayers} style={{"cursor":"pointer"}}>Players</a> menu to view each players stored history.
         <br/>
         <br/>
         Any issues or ideas for this app, just yell at Coach Pat!

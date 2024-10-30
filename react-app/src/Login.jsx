@@ -4,7 +4,80 @@ import { auth } from "./config/firestore.js";
 import { createUserWithEmailAndPassword,sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, GoogleAuthProvider } from "firebase/auth";
 import Button from "./Button.jsx";
 import Input from "./Input.jsx";
+//import { auth, googleProvider, signInWithPopup, signOut } from "./config/firestore.js";
 
+const Login2 = ({setIsLoggedIn,setUser,user}) => {
+    //const [user, setUser] = useState(null);
+  
+    const handleGoogleSignIn = async () => {
+      try {
+        const result = await signInWithPopup(auth, googleProvider);
+        setUser(result.user);
+        setIsLoggedIn(true);
+      } catch (error) {
+        console.error("Error signing in with Google", error);
+      }
+    };
+  
+    const handleSignOut = async () => {
+      try {
+        await signOut(auth);
+        setUser(null);
+        setIsLoggedIn(false);
+      } catch (error) {
+        console.error("Error signing out", error);
+      }
+    };
+  
+    return (
+      <div style={styles.container}>
+        {user ? (
+          <div style={styles.userInfo}>
+            <img src={user.photoURL} alt="User" style={styles.avatar} />
+            <h2>Welcome, {user.displayName}!</h2>
+            <button onClick={handleSignOut} style={styles.button}>
+              Sign Out
+            </button>
+          </div>
+        ) : (
+          <button onClick={handleGoogleSignIn} style={styles.button}>
+            Sign in with Google
+          </button>
+        )}
+      </div>
+    );
+  };
+  
+  const styles = {
+    container: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      height: "100vh",
+      backgroundColor: "#f0f2f5",
+    },
+    userInfo: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    },
+    avatar: {
+      borderRadius: "50%",
+      width: "80px",
+      height: "80px",
+      marginBottom: "20px",
+    },
+    button: {
+      padding: "10px 20px",
+      fontSize: "16px",
+      cursor: "pointer",
+      borderRadius: "5px",
+      border: "none",
+      backgroundColor: "#4285F4",
+      color: "#fff",
+    },
+  };
 
 function Login({setIsLoggedIn}) {
     //console.log(auth);

@@ -166,18 +166,20 @@ export default function StatTracker({games, players, leagues, profile}){
         
     }
     
-    return (<>
+    return (<div>
 
-        { !isTracking && (<>
+        { !isTracking && (<div>
             <br/><br/>
             <Button onClick={handleSetLiveGame}>Set Live Game</Button>
+            <br/><br/>
             <Dropdown placeholder="Select a Player" options={playersNVP} initialValue={playerId} onChange={handleOnPlayerChange}/>
             <Dropdown placeholder="Select a League" options={leaguesNVP} initialValue={leagueId} onChange={handleOnLeagueChange}/>
             <Dropdown placeholder="Select a Game" options={gamesNVP} initialValue={gameId} onChange={handleOnGameChange}/>
             <Button onClick={handleStatTrackOnClick}>Start Tracking!</Button>
-        </>)}
+        </div>)}
 
-        {isTracking && (<>
+        {isTracking && (<div>
+            <br/><br/>
             <h3><b>Tracking:</b> {players.find((p) => p.id == playerId).firstName} {players.find((p) => p.id == playerId).lastName}</h3>
             <h3><b>League:</b> {leagues.find((l) => l.id == leagueId).name}</h3>
             <h3><b>Game:</b> {games.find((g) => g.id == gameId).name}</h3>
@@ -191,6 +193,6 @@ export default function StatTracker({games, players, leagues, profile}){
             <br/>
             <Button onClick={handleSwitchOnClick}>Save Stats</Button>|||
             <Button onClick={() => setIsTracking(false)} className="btn-accent">Cancel</Button>
-        </>)}
-    </>);
+        </div>)}
+    </div>);
 }

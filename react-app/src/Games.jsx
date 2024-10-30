@@ -4,6 +4,7 @@ import { faCircleInfo, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import ResponsiveTable from "./ResponsiveTable";
 import { useState, useEffect } from "react";
 import Dropdown from "./Dropdown.jsx";
+import sortArray from "./functions/sortArray.jsx";
 
 export default function Games({games, onGetLeague, onGetPlayer, leagues, isAdmin, isManage, title}) {
     const [gameData, setGameData] = useState([]);
@@ -48,7 +49,7 @@ export default function Games({games, onGetLeague, onGetPlayer, leagues, isAdmin
     },[leagues]);
 
     useEffect(() => {
-        const tempGames = games.filter((g)=> g.leagueId === leagueId);
+        const tempGames = sortArray(games.filter((g)=> g.leagueId === leagueId), [{name: "date"},{name: "name"}]);
         const tempGameData = tempGames.map((g) => {
                 return ({
                     name: g.name,
@@ -60,8 +61,7 @@ export default function Games({games, onGetLeague, onGetPlayer, leagues, isAdmin
                         </Link>
                     )
                 });
-        })
-
+        });
         setGameData(tempGameData);
     },[leagueId]);
 
@@ -80,16 +80,7 @@ export default function Games({games, onGetLeague, onGetPlayer, leagues, isAdmin
         localStorage.setItem("leagueId", e.target.value);
     }
     function displayMedalWinners(g){
-        games.sort((a,b) => {
-            const tempLeagueA = onGetLeague(a.leagueId);
-            const tempLeagueB = onGetLeague(b.leagueId);
-            if (tempLeagueA.name !== tempLeagueB.name) {
-                return tempLeagueA.name.localeCompare(tempLeagueB.name);
-              } else {
-                return a.name.localeCompare(b.name);;
-              }
-
-        })
+        games = sortArray(games, [{name: "date"},{name: "name"}]);
         let winnerText = "";
         if(g.medalWinners){
             winnerText = g.medalWinners.reduce((fullText, p)=> {

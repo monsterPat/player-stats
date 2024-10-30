@@ -9,7 +9,7 @@ export default function PlayerDetails({onGetPlayer, playerId}){
 
     <div className="playerInfo">
 
-        <h1>Profile</h1>
+        <h2>Profile</h2>
         <div className="attribute">
             <strong>Name:</strong> {`${player.firstName} ${player.lastName}`}
         </div>

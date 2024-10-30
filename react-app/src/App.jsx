@@ -40,6 +40,7 @@ function App() {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
+      //console.log(user)
     }); 
 
     return () => unsubscribe();
@@ -128,10 +129,11 @@ function App() {
     return games.find((g) => g.id == id);
   }
   return (<>
-    {!isLoggedIn && (<div className="container"><Login setIsAdmin={setIsAdmin} setIsLoggedIn={setIsLoggedIn}/></div>)}
+    {!isLoggedIn && (<div className="container"><Login user={user} setUser={setUser} setIsLoggedIn={setIsLoggedIn}/></div>)}
     {isLoggedIn && (<BrowserRouter>
-      <NavBar setLoggedIn={setIsLoggedIn} profile={profile}/>
+      
       <div className="container">
+      <NavBar setLoggedIn={setIsLoggedIn} profile={profile}/>
         <Routes>
           <Route path="/" element={<Home/>}></Route>
           <Route path="/profile" element={<Profile getProfile={getProfile} profile={profile} players={players}/>}></Route>

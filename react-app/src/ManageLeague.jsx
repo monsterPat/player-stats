@@ -112,7 +112,7 @@ function ManageLeague({players, leagues, onGetLeague, getGames, getLeagues, game
     setRosterPlayers(rosterPlayers.filter((p) => p.id != id));
   }
 
-  return (<>
+  return (<div>
     <Input placeholder="Name" onChange={(e) => {setName(e.target.value)}} value={name} required></Input>
     <Input placeholder="Start Date"  type="date" onChange={(e) => {
           const tempDayJS = new dayjs(e.target.value,"MM-DD-YYY")
@@ -136,7 +136,7 @@ function ManageLeague({players, leagues, onGetLeague, getGames, getLeagues, game
     <Button onClick={handleUpdateLeagueOnClick} >Update League</Button><>|||</>
     <Button className="btn-accent" onClick={() => navigate("/games")} >Cancel</Button>
 
-    </>);
+    </div>);
 }
 
 export default ManageLeague;

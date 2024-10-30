@@ -56,13 +56,14 @@ function Profile({profile, players, getProfile}) {
         });
     }
 
-    return (<>
+    return (<div>
+        <br/>
         <Input placeholder="Email" onChange={(e) => {setEmail(e.target.value)}}  value={profile.email} readOnly></Input>
         <Input placeholder="First Name" onChange={(e) => {setFirstName(e.target.value)}} value={firstName}></Input>
         <Input placeholder="Last Name" onChange={(e) => {setLastName(e.target.value)}} value={lastName}></Input>
         <Dropdown placeholder="Who is your player?" onChange={(e) => {setMyPlayerId(e.target.value)}}  value={myPlayerId} options={playersNVP} initialValue={myPlayerId}/ >
         <Button onClick={handleUpdateProfileOnClick} >Update Profile</Button>
-    </>)
+    </div>)
 }
 
 export default Profile
