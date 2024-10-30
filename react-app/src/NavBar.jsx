@@ -2,8 +2,9 @@ import React, {useState} from 'react';
 import {AiOutlineMenu, AiOutlineClose, AiOutlineSearch, AiOutlineUser} from 'react-icons/ai';
 import Logo from '/src/images/teamLogo.jpg';
 import { NavLink } from "react-router-dom";
+import { IoIosLogOut } from "react-icons/io";
 
-const Navbar = ({setLoggedIn}) => {
+const Navbar = ({setLoggedIn, profile}) => {
   const [nav, setNav] = useState(false);
   return (
     <div className="navbar">
@@ -36,14 +37,6 @@ const Navbar = ({setLoggedIn}) => {
         <li className="nav-item">
           <NavLink onClick={() => {setNav(!nav)}}
             className={({ isActive }) => (isActive ? "nav-active" : "")}
-            to="/liveGame"
-          >
-            Live Game
-          </NavLink>
-        </li>
-        <li className="nav-item">
-          <NavLink onClick={() => {setNav(!nav)}}
-            className={({ isActive }) => (isActive ? "nav-active" : "")}
             to="/players"
           >
             Players
@@ -66,16 +59,25 @@ const Navbar = ({setLoggedIn}) => {
           </NavLink>
         </li>
         <li className="nav-item">
-          <a onClick={() => {
+          <NavLink onClick={() => {setNav(!nav)}}
+            className={({ isActive }) => (isActive ? "nav-active" : "")}
+            to="/profile"
+          >
+            <AiOutlineUser size={25}/>
+          </NavLink>
+        </li>
+        <li className="nav-item">
+          <a style={{"cursor":"pointer"}} onClick={() => {
               setLoggedIn(false);
               {setNav(!nav)};
             }}
           >
-            Logout
+            <IoIosLogOut size={25}/>
           </a>
         </li>
       </ul>
     </nav>
+    <div className="top-right-corner"><p>Logged in as {profile.email}</p></div>
     <div onClick={() => setNav(!nav)} className="mobilebtn">
       {!nav? <AiOutlineMenu size={25}/> : <AiOutlineClose size={25}/>}
     </div>

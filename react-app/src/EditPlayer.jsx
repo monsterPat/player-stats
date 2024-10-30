@@ -5,18 +5,17 @@ import Button from "./Button.jsx";
 import Swal from "sweetalert2";
 import { db } from "./config/firestore.js";
 import {doc, setDoc} from "firebase/firestore";
-import {useParams, useOutletContext} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import AgeSelector from "./AgeSelector.jsx";
 
-export default function EditPlayer({getPlayers, onGetPlayer}){
+export default function EditPlayer({getPlayers, onGetPlayer, playerId}){
     const params = useParams();
-    const player= onGetPlayer(params.id);
-    //console.log(player);
+    const [player, setPlayer] = useState((playerId && playerId != "")?onGetPlayer(playerId):onGetPlayer(params.id));
     const [firstName, setFirstName] = useState(player.firstName);
     const [lastName, setLastName] = useState(player.lastName);
     const [age, setAge] = useState(player.age);
     const [team, setTeam] = useState(player.team);
-
+    const [imgSrc, setImgSrc] = useState(player.imgId == 1?`../../../images/Player${player.imgId}.JPG`: "../../../images/Player8.JPG");
     const navigate = useNavigate();
 
     const handleSavePlayerOnClick = async (e) => {
@@ -53,14 +52,27 @@ export default function EditPlayer({getPlayers, onGetPlayer}){
         });
         navigate(`/player/${params.id}`);
     }
-    return (
-    <div>
-        <Input placeholder="First Name" onChange={(e) => {setFirstName(e.target.value)}} value={firstName} required></Input>
-        <Input placeholder="Last Name" onChange={(e) => {setLastName(e.target.value)}} value={lastName} required></Input>
-        <AgeSelector placeholder="Age" onChange={(e) => {setAge(Number.parseInt(e.target.value))}} value={age} required></AgeSelector>
-        <Input placeholder="Team" onChange={(e) => {setTeam(e.target.value)}} value={team} required></Input>
-        <br/>
-        <Button onClick={handleSavePlayerOnClick} className="btn-default">Save</Button><>|||</>
-        <Button onClick={() => navigate(`/player/${params.id}`)} className="btn-accent">Cancel</Button>
-    </div>)
+    return (<>
+        <div className="product-details-layout">
+            <div>
+            <h2>{`${player.firstName} ${player.lastName}`}</h2>
+            <img
+                src={imgSrc}
+                width={player.imgId == 1?"225":"300"}
+                height="300"
+                className="product-details-image"
+                alt={`${player.firstName} ${player.lastName}`}
+            />
+            </div>
+            <div>
+                <Input placeholder="First Name" onChange={(e) => {setFirstName(e.target.value)}} value={firstName} required></Input>
+                <Input placeholder="Last Name" onChange={(e) => {setLastName(e.target.value)}} value={lastName} required></Input>
+                <AgeSelector placeholder="Age" onChange={(e) => {setAge(Number.parseInt(e.target.value))}} value={age} required></AgeSelector>
+                <Input placeholder="Team" onChange={(e) => {setTeam(e.target.value)}} value={team} required></Input>
+                <br/>
+                <Button onClick={handleSavePlayerOnClick} className="btn-default">Save</Button><>|||</>
+                <Button onClick={() => navigate(`/player/${params.id}`)} className="btn-accent">Cancel</Button>
+            </div>
+        </div>
+    </>)
 }

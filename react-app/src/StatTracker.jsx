@@ -7,11 +7,11 @@ import { collection, getDocs, setDoc, doc, addDoc} from "firebase/firestore";
 import { db } from "./config/firestore.js";
 import Swal from "sweetalert2";
 
-export default function StatTracker({games, players, leagues}){
+export default function StatTracker({games, players, leagues, profile}){
     const [stats, setStats] = useState([]);
-    const [playerId, setPlayerId] = useState(1);
-    const [gameId, setGameId] = useState(1);
-    const [leagueId, setLeagueId] = useState(1);
+    const [playerId, setPlayerId] = useState((profile && profile.myPlayerId)?profile.myPlayerId:"");
+    const [gameId, setGameId] = useState("");
+    const [leagueId, setLeagueId] = useState("");
     const [leaguesNVP, setLeaguesNVP] = useState([]);
     const [gamesNVP, setGamesNVP] = useState([]);
     const [playersNVP, setPlayersNVP] = useState([]);
@@ -49,10 +49,12 @@ export default function StatTracker({games, players, leagues}){
 
         setPlayersNVP(tempPlayersNVP);
         setLeaguesNVP(tempLeaguesNVP);
-        const liveGame = games.find((g) => g.isLive);
-        if(liveGame){
-            setLeagueId(liveGame.leagueId);
-            setGameId(liveGame.id);
+        if(leagueId == "" || gameId ==""){
+            const liveGame = games.find((g) => g.isLive);
+            if(liveGame){
+                setLeagueId(liveGame.leagueId);
+                setGameId(liveGame.id);
+            }
         }
 
     },[])
@@ -160,6 +162,7 @@ export default function StatTracker({games, players, leagues}){
             setLeagueId(liveGame.leagueId);
             setGameId(liveGame.id);
         }
+        setPlayerId((profile && profile.myPlayerId)?profile.myPlayerId:"");
         
     }
     
@@ -175,10 +178,10 @@ export default function StatTracker({games, players, leagues}){
         </>)}
 
         {isTracking && (<>
-            <h2>Tracking {players.find((p) => p.id == playerId).firstName} {players.find((p) => p.id == playerId).lastName}</h2>
-            <h2>League: {leagues.find((l) => l.id == leagueId).name}</h2>
-            <h2>Game: {games.find((g) => g.id == gameId).name}</h2>
-            
+            <h3><b>Tracking:</b> {players.find((p) => p.id == playerId).firstName} {players.find((p) => p.id == playerId).lastName}</h3>
+            <h3><b>League:</b> {leagues.find((l) => l.id == leagueId).name}</h3>
+            <h3><b>Game:</b> {games.find((g) => g.id == gameId).name}</h3>
+            <br/>
             <hr/>
             <hr/>
             <StatCounter label="Points" onStatSubtract={handleStatSubtract} onStatAdd={handleStatAdd} initialValue={liveStat.points} stat={liveStat} statType="points"/>

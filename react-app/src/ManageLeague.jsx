@@ -62,7 +62,6 @@ function ManageLeague({players, leagues, onGetLeague, getGames, getLeagues, game
   },[roster])
 
   const handleUpdateLeagueOnClick = async () => {
-    console.log("updating league data");
     if(!name || !startDate || !endDate){
       return Swal.fire({
           icon: 'error',

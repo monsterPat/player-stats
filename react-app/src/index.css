@@ -267,7 +267,19 @@ input:focus {
   display: inline-block;
 }
 
+.tabs .div-tab {
+  display: inline-block;
+}
+
 .tabs a {
+  text-decoration: none;
+  padding-bottom: 10px;
+  color: var(--black);
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.tabs .div-tab {
   text-decoration: none;
   padding-bottom: 10px;
   color: var(--black);
@@ -584,6 +596,8 @@ body {
 }
 
 
+
+
 .btn-add{
   background-color:#1b9a59;
   padding: 10px 20px;
@@ -757,6 +771,17 @@ a.nav-active {
 
 .responsive-table th {
   font-weight: bold;
+}
+
+.top-right-corner {
+  position: absolute;
+  top: 0rem;
+  right: 1rem;
+  font-size: 2rem;
+}
+
+.top-right-corner p {
+  font-size: 9px;
 }
 /*@media screen and (max-width: 600px) {
   .responsive-table {

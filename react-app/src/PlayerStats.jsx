@@ -4,10 +4,12 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ResponsiveTable from "./ResponsiveTable.jsx";
 
-export default function PlayerStats({onGetGame, onGetLeague, onGetPlayer}){
+export default function PlayerStats({onGetGame, onGetLeague, onGetPlayer, playerId}){
     const [stats, setStats] = useState([]);
     const [statData, setStatData] = useState([]);
     const [footer,setFooter] = useState([]);
+    const params = useParams();
+    const player = (playerId && playerId != "")?onGetPlayer(playerId):onGetPlayer(params.id);
     const statColumns = [
         {
             name: "Game",
@@ -30,8 +32,6 @@ export default function PlayerStats({onGetGame, onGetLeague, onGetPlayer}){
             width: "20%"
         }
     ]
-    const params = useParams();
-    const player= onGetPlayer(params.id);
     useEffect(() => {
         const tempStatData = stats.map((s) => {
             return ({

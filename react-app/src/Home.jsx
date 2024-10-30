@@ -1,22 +1,36 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
+  const navigate = useNavigate();
+  function goProfile(){
+    navigate("/profile");
+  }
+  function goStatTracker(){
+    navigate("/statTracker");
+  }
+  function goPlayers(){
+    navigate("/players");
+  }
   return (
     <div>
       <p>
-        We are the Bulls!
+        We are the Zilker Bulls!
         <br/>
         <br/>
-        This app is designed to reference game details, players and allow stat tracking for players.
+        This app is designed to reference game details, player history, and allow stat tracking for players.
         <br/>
         <br/>
-        To track stats for a player, click Stat Tracker in the menu. By default the current game will be selected. You just need to choose the player and Start Tracking!
+        Select your player in the <a onClick={goProfile} style={{"cursor":"pointer"}}>Profile</a> to easily follow your guy.
         <br/>
         <br/>
-        Feel free to navigate to the Players menu to view each players stored history.
+        To track stats for a player, click <a onClick={goStatTracker} style={{"cursor":"pointer"}}>Stat Tracker</a> in the menu. By default the current game will be selected. You just need to choose the player and Start Tracking!
         <br/>
         <br/>
-        Any issues or ideas for this app, just yell at Coach Pat, he wrote it (and this text...)!
+        Feel free to navigate to the <a onClick={goPlayers} style={{"cursor":"pointer"}}>Players</a> menu to view each players stored history.
+        <br/>
+        <br/>
+        Any issues or ideas for this app, just yell at Coach Pat!
       </p>
     </div>
   )

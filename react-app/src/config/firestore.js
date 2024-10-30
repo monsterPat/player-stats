@@ -3,18 +3,10 @@
 import { initializeApp } from "firebase/app";
 import {initializeFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import '../wasm_exec.js';
-import '../wasmTypes.d.js';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-function wasmFibonacciSum(number) {
-  return new Promise<number>((resolve) => {
-      const res = window.wasmFibonacciSum(n);
-      resolve(res);
-  });
-}
+
 
 
 const firebaseConfig = {
@@ -35,7 +27,7 @@ const db = initializeFirestore(app, {
     experimentalForceLongPolling: true
 });
 //setLogLevel("debug");
-export {auth, db, wasmFibonacciSum};
+export {auth, db};
 
 //q
 //const admin = require('firebase-admin');
