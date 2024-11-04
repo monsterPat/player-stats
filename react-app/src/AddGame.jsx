@@ -63,7 +63,7 @@ export default function AddGame({leagues, getGames}){
         navigate("/games");
     }
     return (
-    <div>
+    <div className="container-page">
         <Dropdown placeholder="Select a League" onChange={(e) => {setLeagueId(e.target.value)}} options={leaguesNVP} initialValue={leagueId}/ >
         <Input placeholder="Name" onChange={(e) => {setName(e.target.value)}} required></Input>
         <Input placeholder="Date"  type="date" onChange={(e) => {

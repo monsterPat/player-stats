@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
-import { NavLink, Routes, Route, useParams, Outlet} from "react-router-dom";
+import { NavLink, Routes, Route, useParams, Outlet, Link} from "react-router-dom";
 import PlayerDetails from "./PlayerDetails.jsx";
 import PlayerStats from "./PlayerStats";
+import { FaArrowLeft } from "react-icons/fa";
 
-export default function Player({onGetPlayer, playerId, onGetGame, onGetLeague}) {
-  //const { get } = useFetch("https://react-tutorial-demo.firebaseio.com/");
+export default function Player({onGetPlayer, playerId, onGetGame, onGetLeague, isPlayers}) {
   const [isDetails, setIsDetails] = useState(true);
   const [detailsClass, setDetailsClass] = useState("tab-active div-tab");
   const [statsClass, setStatsClass] = useState("div-tab");
   const params = useParams();
-  const tempPlayerId=(playerId && playerId != "")?playerId: params.id;
+  const tempPlayerId=((!params || !params.id )&&playerId && playerId != "")?playerId: params.id;
   const player= onGetPlayer(tempPlayerId);
 
   function switchTabs(tab){
@@ -25,7 +25,7 @@ export default function Player({onGetPlayer, playerId, onGetGame, onGetLeague}) 
   }
 
 
-  return (
+  return (<div className={isPlayers?"":"container-page"}>
     <div className="product-details-layout">
       <div>
         <h2>{`${player.firstName} ${player.lastName}`}</h2>
@@ -67,9 +67,10 @@ export default function Player({onGetPlayer, playerId, onGetGame, onGetLeague}) 
             </>)}
           </ul>
         </div>
+        {!isPlayers && <div className="a-link"><Link to="/players" ><FaArrowLeft /> Back to Players</Link></div>}
         
         <Outlet context={player} />
       </div>
     </div>
-  );
+  </div>);
 }

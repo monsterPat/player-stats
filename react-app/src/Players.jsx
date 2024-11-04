@@ -7,6 +7,7 @@ import { faCircleInfo, faRemove } from '@fortawesome/free-solid-svg-icons';
 import {useState, useEffect} from "react";
 import ResponsiveTable from "./ResponsiveTable.jsx";
 import Player from "./Player.jsx";
+import { FaArrowRight } from "react-icons/fa";
 
 export default function Players({players, setIsAdding, isManage, title, OnRemovePlayer, profile, onGetPlayer, onGetGame, onGetLeague, isAdmin}) {
     config.autoAddCss = false;
@@ -42,20 +43,21 @@ export default function Players({players, setIsAdding, isManage, title, OnRemove
     
 
     return (
-    <div>
-        {!isManage && (<div>
+    <div className={isManage?"":"container-page"}>
+        {!isManage && (<>
         <h1>My Player</h1>
-        {(profile && profile.myPlayerId && profile.myPlayerId !="") && (<Player onGetLeague={onGetLeague} onGetGame={onGetGame} onGetPlayer={onGetPlayer} playerId={profile.myPlayerId}/>)}
+        {(profile && profile.myPlayerId && profile.myPlayerId !="") && (<Player onGetLeague={onGetLeague} onGetGame={onGetGame} onGetPlayer={onGetPlayer} playerId={profile.myPlayerId} isPlayers={true}/>)}
         {(!profile || !profile.myPlayerId || profile.myPlayerId == "") && (
             <p>
                 <br/>
                 You have not selected "My Player". Select your player in the <a onClick={goProfile} style={{"cursor":"pointer"}}>Profile</a> to easily follow your guy.
                 <br/>
             </p>)}
-        </div>)}
+        </>)}
         <ResponsiveTable title={title} data={playerData} columnHeaders={playerColumns}/>
         <br/>
-        {isAdmin && !isManage && <Link onClick={() => setIsAdding(true)} to="/addPlayer">Add Player</Link>}
+        {isAdmin && !isManage && <div className="a-link"><Link onClick={() => setIsAdding(true)} to="/addPlayer">Add Player <FaArrowRight/></Link></div>}
+        {profile && profile.myPlayerId && <Outlet context={onGetPlayer(profile.myPlayerId)} />}
     </div>
 
     )

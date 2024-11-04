@@ -6,6 +6,7 @@ import Button from "./Button.jsx";
 import { collection, getDocs, setDoc, doc, addDoc} from "firebase/firestore";
 import { db } from "./config/firestore.js";
 import Swal from "sweetalert2";
+import TeamStatTracker from "./TeamStatTracker.jsx";
 
 export default function StatTracker({games, players, leagues, profile}){
     const [stats, setStats] = useState([]);
@@ -17,7 +18,11 @@ export default function StatTracker({games, players, leagues, profile}){
     const [playersNVP, setPlayersNVP] = useState([]);
     const [isTracking, setIsTracking] = useState(false);
     const [liveStat, setLiveStat] = useState({});
+    const [liveStats,setLiveStats] = useState([]);
     const [isNewStat, setIsNewStat] = useState(false);
+    const [isTeam, setIsTeam] = useState(false);
+    const [teamClass, setTeamClass] = useState("div-tab");
+    const [singlePlayerClass, setSinglePlayerClass] = useState("tab-active div-tab");
 
 
     useEffect(() => {
@@ -92,11 +97,13 @@ export default function StatTracker({games, players, leagues, profile}){
         }
         setIsTracking(true);
         setIsNewStat(false);
-        let liveStats = [];
-        liveStats = stats.filter((s) => (s.playerId == playerId && s.gameId == gameId ));
-        if(!liveStats || liveStats.length == 0){
+        let tempLiveTeamStats = [];
+        let tempLivePlayerStats =[];
+        tempLivePlayerStats = stats.filter((s) => (s.playerId == playerId && s.gameId == gameId ));
+        tempLiveTeamStats = stats.filter((s) => (s.gameId == gameId ));
+        if(!tempLivePlayerStats || tempLivePlayerStats.length == 0){
             setIsNewStat(true);
-            liveStats = [
+            tempLivePlayerStats = [
                 {
                     //id: stats.length + 1, 
                     playerId: playerId, 
@@ -108,7 +115,8 @@ export default function StatTracker({games, players, leagues, profile}){
                 }
             ]
         }
-        setLiveStat(liveStats[0]);
+        setLiveStat(tempLivePlayerStats[0]);
+        setLiveStats(tempLiveTeamStats);
     }
     const handleSwitchOnClick = async() => {
         try {
@@ -165,34 +173,58 @@ export default function StatTracker({games, players, leagues, profile}){
         setPlayerId((profile && profile.myPlayerId)?profile.myPlayerId:"");
         
     }
+
+    function switchTabs(tab){
+        if(tab == "Single"){
+          setIsTeam(false);
+          setSinglePlayerClass("tab-active div-tab");
+          setTeamClass("div-tab");
+        }else{
+          setIsTeam(true);
+          setSinglePlayerClass("div-tab");
+          setTeamClass("tab-active div-tab");
+        }
+      }
     
-    return (<div>
-
-        { !isTracking && (<div>
-            <br/><br/>
-            <Button onClick={handleSetLiveGame}>Set Live Game</Button>
-            <br/><br/>
-            <Dropdown placeholder="Select a Player" options={playersNVP} initialValue={playerId} onChange={handleOnPlayerChange}/>
-            <Dropdown placeholder="Select a League" options={leaguesNVP} initialValue={leagueId} onChange={handleOnLeagueChange}/>
-            <Dropdown placeholder="Select a Game" options={gamesNVP} initialValue={gameId} onChange={handleOnGameChange}/>
-            <Button onClick={handleStatTrackOnClick}>Start Tracking!</Button>
-        </div>)}
-
-        {isTracking && (<div>
-            <br/><br/>
-            <h3><b>Tracking:</b> {players.find((p) => p.id == playerId).firstName} {players.find((p) => p.id == playerId).lastName}</h3>
-            <h3><b>League:</b> {leagues.find((l) => l.id == leagueId).name}</h3>
-            <h3><b>Game:</b> {games.find((g) => g.id == gameId).name}</h3>
-            <br/>
-            <hr/>
-            <hr/>
-            <StatCounter label="Points" onStatSubtract={handleStatSubtract} onStatAdd={handleStatAdd} initialValue={liveStat.points} stat={liveStat} statType="points"/>
-            <StatCounter label="Rebounds" onStatSubtract={handleStatSubtract} onStatAdd={handleStatAdd} initialValue={liveStat.rebounds} stat={liveStat} statType="rebounds"/>
-            <StatCounter label="Steals" onStatSubtract={handleStatSubtract} onStatAdd={handleStatAdd} initialValue={liveStat.steals} stat={liveStat} statType="steals"/>
-            <StatCounter label="Assists" onStatSubtract={handleStatSubtract} onStatAdd={handleStatAdd} initialValue={liveStat.assists} stat={liveStat} statType="assists"/>
-            <br/>
-            <Button onClick={handleSwitchOnClick}>Save Stats</Button>|||
-            <Button onClick={() => setIsTracking(false)} className="btn-accent">Cancel</Button>
-        </div>)}
+    return (<div className="container-page">
+        <div className="tabs">
+          <ul>
+        <li>
+            <div className={singlePlayerClass} style={{"cursor":"pointer"}} onClick={() => switchTabs("Single")}>
+                Single Player
+            </div>
+            <div className={teamClass} style={{"cursor":"pointer"}} onClick={() => switchTabs("Team")}>
+                Full Team
+            </div>
+            { !isTracking && (<div>
+                <br/><br/>
+                <Button onClick={handleSetLiveGame}>Set Live Game</Button>
+                <br/><br/>
+                <Dropdown placeholder="Select a Player" options={playersNVP} initialValue={playerId} onChange={handleOnPlayerChange}/>
+                <Dropdown placeholder="Select a League" options={leaguesNVP} initialValue={leagueId} onChange={handleOnLeagueChange}/>
+                <Dropdown placeholder="Select a Game" options={gamesNVP} initialValue={gameId} onChange={handleOnGameChange}/>
+                <Button onClick={handleStatTrackOnClick}>Start Tracking!</Button>
+            </div>)}
+            {!isTeam && isTracking && (
+                <div>
+                    <br/><br/>
+                    <h3><b>Tracking:</b> {players.find((p) => p.id == playerId).firstName} {players.find((p) => p.id == playerId).lastName}</h3>
+                    <h3><b>League:</b> {leagues.find((l) => l.id == leagueId).name}</h3>
+                    <h3><b>Game:</b> {games.find((g) => g.id == gameId).name}</h3>
+                    <br/>
+                    <hr/>
+                    <hr/>
+                    <StatCounter label="Points" onStatSubtract={handleStatSubtract} onStatAdd={handleStatAdd} initialValue={liveStat.points} stat={liveStat} statType="points"/>
+                    <StatCounter label="Rebounds" onStatSubtract={handleStatSubtract} onStatAdd={handleStatAdd} initialValue={liveStat.rebounds} stat={liveStat} statType="rebounds"/>
+                    <StatCounter label="Steals" onStatSubtract={handleStatSubtract} onStatAdd={handleStatAdd} initialValue={liveStat.steals} stat={liveStat} statType="steals"/>
+                    <StatCounter label="Assists" onStatSubtract={handleStatSubtract} onStatAdd={handleStatAdd} initialValue={liveStat.assists} stat={liveStat} statType="assists"/>
+                    <br/>
+                    <Button onClick={handleSwitchOnClick}>Save Stats</Button>|||
+                    <Button onClick={() => setIsTracking(false)} className="btn-accent">Cancel</Button>
+                </div>)}
+                {isTracking && isTeam && (<TeamStatTracker leagues={leagues} players={players} stats={liveStats} leagueId={leagueId} />)}
+        </li>
+        </ul>
+        </div>
     </div>);
 }

@@ -112,7 +112,7 @@ function ManageLeague({players, leagues, onGetLeague, getGames, getLeagues, game
     setRosterPlayers(rosterPlayers.filter((p) => p.id != id));
   }
 
-  return (<div>
+  return (<div className="container-page">
     <Input placeholder="Name" onChange={(e) => {setName(e.target.value)}} value={name} required></Input>
     <Input placeholder="Start Date"  type="date" onChange={(e) => {
           const tempDayJS = new dayjs(e.target.value,"MM-DD-YYY")
@@ -125,7 +125,7 @@ function ManageLeague({players, leagues, onGetLeague, getGames, getLeagues, game
         }
       } value={endDate} required></Input>
       <br/>
-    <Players OnRemovePlayer={(id)=> handleRemovePlayer(id)}title="League Roster" isManage={true} players={rosterPlayers} setIsAdding={false} />
+    <Players isPlayers={false} OnRemovePlayer={(id)=> handleRemovePlayer(id)}title="League Roster" isManage={true} players={rosterPlayers} setIsAdding={false} />
     <Button onClick={handleAddPlayers} disabled={(queuePlayers && queuePlayers.length>0?false:true)}>Add Selected Players to Roster</Button>
     <MultiSelect2  options={playersNVP} value={queuePlayers} onChange={handleSelectionChange}/ >
     <Games title="League Games" isManage={true} isAdmin={isAdmin} games={leagueGames} onGetPlayer={onGetPlayer} onGetLeague={() => {

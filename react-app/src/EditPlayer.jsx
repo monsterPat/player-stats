@@ -10,7 +10,7 @@ import AgeSelector from "./AgeSelector.jsx";
 
 export default function EditPlayer({getPlayers, onGetPlayer, playerId}){
     const params = useParams();
-    const [player, setPlayer] = useState((playerId && playerId != "")?onGetPlayer(playerId):onGetPlayer(params.id));
+    const [player, setPlayer] = useState(((!params || !params.id )&&playerId && playerId != "")?onGetPlayer(playerId):onGetPlayer(params.id));
     const [firstName, setFirstName] = useState(player.firstName);
     const [lastName, setLastName] = useState(player.lastName);
     const [age, setAge] = useState(player.age);
@@ -52,7 +52,7 @@ export default function EditPlayer({getPlayers, onGetPlayer, playerId}){
         });
         navigate(`/player/${params.id}`);
     }
-    return (<>
+    return (<div className="container-page">
         <div className="product-details-layout">
             <div>
             <h2>{`${player.firstName} ${player.lastName}`}</h2>
@@ -74,5 +74,5 @@ export default function EditPlayer({getPlayers, onGetPlayer, playerId}){
                 <Button onClick={() => navigate(`/player/${params.id}`)} className="btn-accent">Cancel</Button>
             </div>
         </div>
-    </>)
+    </div>)
 }

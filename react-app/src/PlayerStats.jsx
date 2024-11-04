@@ -3,45 +3,48 @@ import { db } from "./config/firestore.js";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ResponsiveTable from "./ResponsiveTable.jsx";
+import sortArray from "./functions/sortArray.jsx";
 
 export default function PlayerStats({onGetGame, onGetLeague, onGetPlayer, playerId}){
     const [stats, setStats] = useState([]);
     const [statData, setStatData] = useState([]);
     const [footer,setFooter] = useState([]);
     const params = useParams();
-    const player = (playerId && playerId != "")?onGetPlayer(playerId):onGetPlayer(params.id);
+    const player = ((!params || !params.id )&&playerId && playerId != "")?onGetPlayer(playerId):onGetPlayer(params.id);
     const statColumns = [
         {
             name: "Game",
-            width: "20%"
+            width: "40%"
         },
         {
             name: "Points",
-            width: "20%"
+            width: "15%"
         },
         {
             name: "Rebounds",
-            width: "20%"
+            width: "15%"
         },
         {
             name: "Steals",
-            width: "20%"
+            width: "15%"
         },
         {
             name: "Assists",
-            width: "20%"
+            width: "15%"
         }
     ]
     useEffect(() => {
-        const tempStatData = stats.map((s) => {
+        let tempStatData = stats.map((s) => {
             return ({
-                game: onGetGame(s.gameId).name,
+                game: `${onGetLeague(onGetGame(s.gameId).leagueId).name} - ${onGetGame(s.gameId).name}`,
                 points: s.points,
                 rebounds: s.rebounds,
                 steals: s.steals,
                 assists: s.assists
             });
         })
+        console.log(tempStatData);
+        tempStatData = sortArray(tempStatData, [{name: "game"}]);
         setStatData(tempStatData);
         const tempFooterData = [
             {

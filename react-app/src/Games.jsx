@@ -5,6 +5,7 @@ import ResponsiveTable from "./ResponsiveTable";
 import { useState, useEffect } from "react";
 import Dropdown from "./Dropdown.jsx";
 import sortArray from "./functions/sortArray.jsx";
+import { FaArrowRight } from "react-icons/fa";
 
 export default function Games({games, onGetLeague, onGetPlayer, leagues, isAdmin, isManage, title}) {
     const [gameData, setGameData] = useState([]);
@@ -112,14 +113,14 @@ export default function Games({games, onGetLeague, onGetPlayer, leagues, isAdmin
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
     return (
-    <div>
-        <div>
+    <div className={!isManage?"container-page":""}>
+        <>
         {!isManage && <Dropdown placeholder="Select a League" options={leaguesNVP} initialValue={leagueId} onChange={handleOnLeagueChange}/>}
-        {isAdmin && !isManage && <Link to={`/league/${leagueId}`}>Manage League</Link>}
+        {isAdmin && !isManage && <div className="a-link"><Link to={`/league/${leagueId}`}>Manage League <FaArrowRight /></Link></div>}
         <ResponsiveTable title={title} data={gameData} columnHeaders={gameColumns}/>
-        </div>
+        </>
         <br/>
-        {isAdmin && <Link to={`/${leagueId}/addGame`}>Add Game</Link>}
+        {isAdmin && <div className="a-link"><Link to={`/${leagueId}/addGame`}>Add Game <FaArrowRight /></Link></div>}
     </div>
     )
 }

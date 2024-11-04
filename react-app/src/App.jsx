@@ -30,19 +30,21 @@ function App() {
   const [players, setPlayers] = useState([]);
   const [games, setGames] = useState([]);
   const [leagues, setLeagues] = useState([]);
+  const [orgs, setOrgs] = useState([]);
   const [isAdmin, setIsAdmin]= useState(false);
   const [isAdding, setIsAdding]= useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [hasProfile, setHasProfile] = useState(false);
   const [profile, setProfile] = useState({});
+  const [orgId, setOrgId] = useState("jepQb9fJ9iTZ2Jtn02bx");
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
       //console.log(user)
     }); 
-
+    getOrgs();
     return () => unsubscribe();
   }, []);
 
@@ -50,7 +52,7 @@ function App() {
 
   useEffect(() => {
     setIsAdmin(false);
-    if(user && user.email === import.meta.env.VITE_ADMIN_LOGIN_ID){
+    if(user && import.meta.env.VITE_ADMIN_LOGIN_ID.includes(user.email.toLowerCase())){
       setIsAdmin(true);
     }
   },[user]);
@@ -109,6 +111,17 @@ function App() {
     }
   }
 
+  const getOrgs = async () => {
+    try{
+      const querySnapshot = await getDocs(collection(db, "organizations"));
+      const tempOrgs = querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
+      setOrgs(tempOrgs);
+      console.log(tempOrgs);
+    } catch (error){
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     if(isLoggedIn){
       console.log("reloading data");
@@ -129,7 +142,7 @@ function App() {
     return games.find((g) => g.id == id);
   }
   return (<>
-    {!isLoggedIn && (<div className="container"><Login user={user} setUser={setUser} setIsLoggedIn={setIsLoggedIn}/></div>)}
+    {!isLoggedIn && (<div className="container"><Login orgId={orgId} setOrgId={setOrgId} orgs={orgs} user={user} setUser={setUser} setIsLoggedIn={setIsLoggedIn}/></div>)}
     {isLoggedIn && (<BrowserRouter>
       
       <div className="container">
@@ -140,7 +153,7 @@ function App() {
           <Route path="/players" element={<Players onGetLeague={handleGetLeague} onGetGame={handleGetGame} onGetPlayer={handleGetPlayer} profile={profile} title="All Players" isManage={false} players={players} setIsAdding={setIsAdding} isAdmin={isAdmin} />}></Route>
           <Route path="/addPlayer"  element={<AddPlayer players={players} setPlayers={setPlayers} getPlayers={getPlayers} />}></Route>
           <Route path="/:id/addGame"  element={<AddGame leagues={leagues} getGames={getGames} />}></Route>
-          <Route path="/player/:id/"   element={<Player onGetLeague={handleGetLeague} onGetGame={handleGetGame} onGetPlayer={handleGetPlayer} playerId=""/>}>
+          <Route path="/player/:id/"   element={<Player isPlayers={false} onGetLeague={handleGetLeague} onGetGame={handleGetGame} onGetPlayer={handleGetPlayer} playerId=""/>}>
             <Route path="" element={<PlayerDetails playerId={(profile && profile.myPlayerId)?profile.myPlayerId:""} onGetPlayer={handleGetPlayer} />}></Route>
             <Route path="stats" element={<PlayerStats playerId={(profile && profile.myPlayerId)?profile.myPlayerId:""} onGetLeague={handleGetLeague} onGetGame={handleGetGame} onGetPlayer={handleGetPlayer} />}></Route>
             

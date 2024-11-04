@@ -13,7 +13,7 @@ const Home = () => {
     navigate("/players");
   }
   return (
-    <div>
+    <div className="container-page">
       <p>
         We are the Zilker Bulls!
         <br/>

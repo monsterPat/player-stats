@@ -88,7 +88,7 @@ export default function EditGame({leagues, getGames, onGetGame, players}){
         setIsLive(!isLive);
     }
     return (
-    <div>
+    <div className="container-page">
         <Dropdown placeholder="Select a League" onChange={(e) => {setLeagueId(e.target.value)}}  value={leagueId} options={leaguesNVP} initialValue={leagueId}/ >
         <Input placeholder="Name" onChange={(e) => {setName(e.target.value)}} value={name} required></Input>
         <Input placeholder="Date"  type="date" onChange={(e) => {

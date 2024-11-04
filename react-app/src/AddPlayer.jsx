@@ -50,13 +50,13 @@ export default function AddPlayer({players, getPlayers}){
         navigate("/players");
     }
     return (
-    <div>
+    <div className="container-page">
         <Input placeholder="First Name" onChange={(e) => {setFirstName(e.target.value)}} required></Input>
         <Input placeholder="Last Name" onChange={(e) => {setLastName(e.target.value)}} required></Input>
         <AgeSelector placeholder="Age" onChange={(e) => {setAge(Number.parseInt(e.target.value))}} required></AgeSelector>
         <Input placeholder="Team" onChange={(e) => {setTeam(e.target.value)}} required></Input>
         <br/>
         <Button onClick={handleAddPlayerOnClick} >Add Player</Button><>|||</>
-        <Button onClick={() => navigate("/players")} >Cancel</Button>
+        <Button onClick={() => navigate("/players")} className="btn-accent" >Cancel</Button>
     </div>)
 }

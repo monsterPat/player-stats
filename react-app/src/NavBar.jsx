@@ -8,8 +8,7 @@ const Navbar = ({setLoggedIn, profile}) => {
   const [nav, setNav] = useState(false);
   return (
     <div className="navbar">
-      <NavLink to="/" >
-        <div >
+      <NavLink className="nav-brand" to="/" >
           <div className="nav-image">
             <img
               src={Logo}
@@ -22,13 +21,12 @@ const Navbar = ({setLoggedIn, profile}) => {
           <div className="nav-title">
             <h2>Zilker Bulls</h2>
           </div>
-        </div>
       </NavLink>
       <nav>
       <ul className={nav? ["menu", "active"].join(' '):"menu"}>
         <li className="nav-item">
           <NavLink onClick={() => {setNav(!nav)}}
-            className={({ isActive }) => (isActive ? "nav-active" : "")}
+            className={({ isActive }) => (isActive ? "nav-active" : "nav-item")}
             to="/"
           >
             Home
@@ -36,7 +34,7 @@ const Navbar = ({setLoggedIn, profile}) => {
         </li>
         <li className="nav-item">
           <NavLink onClick={() => {setNav(!nav)}}
-            className={({ isActive }) => (isActive ? "nav-active" : "")}
+            className={({ isActive }) => (isActive ? "nav-active" : "nav-item")}
             to="/players"
           >
             Players
@@ -44,7 +42,7 @@ const Navbar = ({setLoggedIn, profile}) => {
         </li>
         <li className="nav-item">
           <NavLink onClick={() => {setNav(!nav)}}
-            className={({ isActive }) => (isActive ? "nav-active" : "")}
+            className={({ isActive }) => (isActive ? "nav-active" : "nav-item")}
             to="/games"
           >
             Games
@@ -52,7 +50,7 @@ const Navbar = ({setLoggedIn, profile}) => {
         </li>
         <li className="nav-item">
           <NavLink onClick={() => {setNav(!nav)}}
-            className={({ isActive }) => (isActive ? "nav-active" : "")}
+            className={({ isActive }) => (isActive ? "nav-active" : "nav-item")}
             to="/statTracker"
           >
             Stat Tracker
@@ -60,7 +58,7 @@ const Navbar = ({setLoggedIn, profile}) => {
         </li>
         <li className="nav-item">
           <NavLink onClick={() => {setNav(!nav)}}
-            className={({ isActive }) => (isActive ? "nav-active" : "")}
+            className={({ isActive }) => (isActive ? "nav-active" : "nav-item")}
             to="/profile"
           >
             <AiOutlineUser size={25}/>
